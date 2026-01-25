@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Feedback - Simplicity Blog</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .feedback-container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="password"],
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 6px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group input[type="email"]:focus,
+        .form-group input[type="password"]:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .tab-btn {
+            padding: 12px 20px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            color: #95a5a6;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-btn:hover {
+            color: #667eea;
+        }
+
+        .submit-btn,
+        .next-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 40px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.05em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            width: 100%;
+        }
+
+        .submit-btn:hover,
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:active,
+        .next-btn:active {
+            transform: translateY(0);
+        }
+
+        .form-info {
+            background-color: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 30px;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .success-message {
+            display: none;
+            background-color: #d4edda;
+            border: 2px solid #28a745;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            color: #155724;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .tab-buttons {
+                flex-direction: column;
+            }
+
+            .feedback-container {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="main-title"><strong>Simplicity Blog</strong></h1>
+            <p class="tagline">By Adhyain Patel</p>
+            <p class="header-subtitle">✨ Discover Stories. Share Insights. Inspire Others. ✨</p>
+        </div>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <ul class="nav-list">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="index.html#posts" class="nav-link">Posts</a></li>
+                <li><a href="index.html#about" class="nav-link">About</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <h1 class="section-title">💬 Send Your Feedback</h1>
+        
+        <div class="feedback-container">
+            <div class="form-info">
+                <strong>Your feedback is valuable!</strong> Please sign up or log in first, then share your thoughts with us. We read every comment and use your feedback to improve.
+            </div>
+
+            <div class="success-message" id="successMessage">
+                ✅ Thank you! Your feedback has been sent to our email. We appreciate your input!
+            </div>
+
+            <!-- Tab Buttons -->
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="switchTab('login')">🔓 Login</button>
+                <button class="tab-btn" onclick="switchTab('signup')">📝 Sign Up</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login" class="form-section active">
+                <h2 style="color: #667eea; margin-bottom: 20px;">Welcome Back!</h2>
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="login-email">Email Address</label>
+                        <input type="email" id="login-email" name="email" placeholder="your.email@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" name="password" placeholder="Enter your password" required>
+                    </div>
+
+                    <button type="submit" class="next-btn">Login & Continue</button>
+                </form>
+            </div>
+
+            <!-- Sign Up Form -->
+            <div id="signup" class="form-section">
+                <h2 style="color: #667eea; margin-bottom: 20px;">Create Your Account</h2>
+                <form onsubmit="handleSignup(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="signup-fname">First Name</label>
+                            <input type="text" id="signup-fname" name="fname" placeholder="John" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signup-lname">Last Name</label>
+                            <input type="text" id="signup-lname" name="lname" placeholder="Doe" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signup-email">Email Address</label>
+                        <input type="email" id="signup-email" name="email" placeholder="your.email@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signup-password">Password</label>
+                        <input type="password" id="signup-password" name="password" placeholder="Create a strong password" required>
+                    </div>
+
+                    <button type="submit" class="next-btn">Create Account & Continue</button>
+                </form>
+            </div>
+
+            <!-- Feedback Form (Hidden until login/signup) -->
+            <div id="feedbackForm" class="form-section" style="display: none; margin-top: 30px; padding-top: 30px; border-top: 2px solid #ecf0f1;">
+                <h2 style="color: #667eea; margin-bottom: 20px;">Share Your Feedback</h2>
+                <form onsubmit="handleFeedback(event)" id="feedbackSubmit">
+                    <div class="form-group">
+                        <label for="feedback-type">Feedback Type</label>
+                        <select id="feedback-type" name="type" required>
+                            <option value="">-- Select Type --</option>
+                            <option value="Suggestion">💡 Suggestion</option>
+                            <option value="Bug Report">🐛 Bug Report</option>
+                            <option value="Feature Request">⭐ Feature Request</option>
+                            <option value="General Comment">💬 General Comment</option>
+                            <option value="Praise">👏 Praise</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="feedback-subject">Subject</label>
+                        <input type="text" id="feedback-subject" name="subject" placeholder="Brief subject of your feedback" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="feedback-message">Your Feedback</label>
+                        <textarea id="feedback-message" name="message" placeholder="Please share your detailed feedback..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">📧 Send Feedback</button>
+                </form>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="index.html" style="color: #667eea; text-decoration: none; font-weight: 600;">← Back to Home</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 Simplicity Blog by Adhyain. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Store user data
+        let currentUser = null;
+
+        function switchTab(tab) {
+            // Hide all sections
+            document.getElementById('login').classList.remove('active');
+            document.getElementById('signup').classList.remove('active');
+            
+            // Remove active class from buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(tab).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            // Store user info
+            currentUser = {
+                email: email,
+                name: email.split('@')[0]
+            };
+            
+            // Show feedback form
+            showFeedbackForm();
+        }
+
+        function handleSignup(event) {
+            event.preventDefault();
+            const fname = document.getElementById('signup-fname').value;
+            const lname = document.getElementById('signup-lname').value;
+            const email = document.getElementById('signup-email').value;
+            
+            // Store user info
+            currentUser = {
+                firstName: fname,
+                lastName: lname,
+                email: email,
+                name: fname + ' ' + lname
+            };
+            
+            // Show feedback form
+            showFeedbackForm();
+        }
+
+        function showFeedbackForm() {
+            // Hide login/signup sections
+            document.querySelector('.tab-buttons').style.display = 'none';
+            document.getElementById('login').classList.remove('active');
+            document.getElementById('signup').classList.remove('active');
+            
+            // Show feedback form
+            document.getElementById('feedbackForm').style.display = 'block';
+        }
+
+        function handleFeedback(event) {
+            event.preventDefault();
+            
+            const feedbackType = document.getElementById('feedback-type').value;
+            const subject = document.getElementById('feedback-subject').value;
+            const message = document.getElementById('feedback-message').value;
+            
+            // Prepare email data
+            const emailData = {
+                to: 'alexwalls252@gmail.com',
+                subject: `New Feedback: ${feedbackType} - ${subject}`,
+                from: currentUser.email,
+                userName: currentUser.name,
+                feedbackType: feedbackType,
+                message: message,
+                timestamp: new Date().toLocaleString()
+            };
+            
+            // Send feedback via FormSubmit (free service)
+            sendFeedbackEmail(emailData);
+        }
+
+        function sendFeedbackEmail(data) {
+            // Create a hidden form to submit to FormSubmit
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'https://formspree.io/f/mjvzwajp'; // Using Formspree for email
+            form.style.display = 'none';
+            
+            // Add fields
+            const fields = {
+                'User Name': data.userName,
+                'User Email': data.from,
+                'Feedback Type': data.feedbackType,
+                'Subject': data.subject,
+                'Message': data.message,
+                'Timestamp': data.timestamp
+            };
+            
+            for (let key in fields) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = fields[key];
+                form.appendChild(input);
+            }
+            
+            // Add honeypot field
+            const honeypot = document.createElement('input');
+            honeypot.type = 'hidden';
+            honeypot.name = '_captcha';
+            honeypot.value = 'false';
+            form.appendChild(honeypot);
+            
+            // Submit form
+            document.body.appendChild(form);
+            form.submit();
+            
+            // Show success message
+            setTimeout(() => {
+                document.getElementById('successMessage').classList.add('show');
+                document.getElementById('feedbackSubmit').reset();
+                
+                // Redirect after 3 seconds
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 3000);
+            }, 500);
+        }
+    </script>
+</body>
+</html>

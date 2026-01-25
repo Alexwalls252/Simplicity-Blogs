@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Blogs - Simplicity Blog</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .search-section {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            border: 2px solid #ecf0f1;
+            border-radius: 25px;
+            padding: 0 20px;
+            transition: all 0.3s ease;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .search-container:focus-within {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-icon {
+            font-size: 1.3em;
+            color: #667eea;
+            margin-right: 10px;
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 12px 0;
+            font-size: 1em;
+            color: #2c3e50;
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: #95a5a6;
+        }
+
+        .search-results-count {
+            text-align: center;
+            color: #667eea;
+            margin-top: 15px;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: #95a5a6;
+            font-size: 1.1em;
+        }
+
+        .pending-badge {
+            background: #f39c12;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 700;
+            margin-left: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .new-badge {
+            background: #27ae60;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 700;
+            margin-left: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .pending-blog-item {
+            border: 2px solid #f39c12;
+            opacity: 0.95;
+        }
+
+        .approved-blog-item {
+            border: 2px solid #27ae60;
+            opacity: 1;
+        }
+
+        .filter-section {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid #ecf0f1;
+            background: white;
+            color: #667eea;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .blogs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .blog-item {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid #ecf0f1;
+        }
+
+        .blog-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.15);
+        }
+
+        .blog-category {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 15px;
+            font-size: 0.85em;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .blog-content {
+            padding: 20px;
+        }
+
+        .blog-author {
+            font-size: 0.9em;
+            color: #95a5a6;
+            margin-bottom: 10px;
+        }
+
+        .blog-item h3 {
+            font-size: 1.3em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .blog-excerpt {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .blog-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9em;
+            color: #95a5a6;
+            padding-top: 15px;
+            border-top: 1px solid #ecf0f1;
+        }
+
+        .blog-read {
+            color: #667eea;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .blog-read:hover {
+            color: #764ba2;
+        }
+
+        .total-blogs {
+            text-align: center;
+            color: #95a5a6;
+            margin-bottom: 30px;
+            font-size: 1.05em;
+        }
+
+        @media (max-width: 768px) {
+            .blogs-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+
+            .filter-buttons {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+
+            .filter-btn {
+                white-space: nowrap;
+            }
+
+            .search-container {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="main-title"><strong>Simplicity Blog</strong></h1>
+            <p class="tagline">By Adhyain Patel</p>
+            <p class="header-subtitle">✨ Discover Stories. Share Insights. Inspire Others. ✨</p>
+        </div>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <ul class="nav-list">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="index.html#posts" class="nav-link">Featured Posts</a></li>
+                <li><a href="all-blogs.html" class="nav-link active">All Blogs</a></li>
+                <li><a href="index.html#about" class="nav-link">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <h1 class="section-title">📚 Explore All Blogs</h1>
+        <p class="total-blogs">Discover 60+ articles on various topics from our community writers</p>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search blogs by keywords..." onkeyup="searchBlogs()">
+            </div>
+            <div class="search-results-count" id="searchCount"></div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterBlogs('all')">All Topics</button>
+                <button class="filter-btn" onclick="filterBlogs('Gaming')">🎮 Gaming</button>
+                <button class="filter-btn" onclick="filterBlogs('Technology')">💻 Technology</button>
+                <button class="filter-btn" onclick="filterBlogs('Science')">🔬 Science</button>
+                <button class="filter-btn" onclick="filterBlogs('Travel')">✈️ Travel</button>
+                <button class="filter-btn" onclick="filterBlogs('Food')">🍽️ Food</button>
+                <button class="filter-btn" onclick="filterBlogs('Health')">🏃 Health</button>
+                <button class="filter-btn" onclick="filterBlogs('Art')">🎨 Art</button>
+            </div>
+        </div>
+
+        <!-- Blogs Grid -->
+        <div class="blogs-grid" id="blogsGrid"></div>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="index.html" style="color: #667eea; text-decoration: none; font-weight: 600;">← Back to Home</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 Simplicity Blog by Adhyain. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Blog data with 60+ blogs from various categories
+        const blogs = [
+            // Gaming
+            { id: 1, title: "Minecraft Survival Tips: Building Your First Base", category: "Gaming", author: "Alex Rivers", excerpt: "Learn essential tips for surviving your first night in Minecraft and building a secure base.", date: "Jan 23, 2026" },
+            { id: 2, title: "Advanced Minecraft Redstone Guide", category: "Gaming", author: "Jordan Tech", excerpt: "Master complex redstone contraptions and automate your Minecraft world like never before.", date: "Jan 21, 2026" },
+            { id: 3, title: "Top 10 Gaming Laptops 2026", category: "Gaming", author: "Sam Gaming", excerpt: "Compare the best gaming laptops with benchmarks and performance reviews for competitive gaming.", date: "Jan 19, 2026" },
+            { id: 4, title: "Esports Career Guide", category: "Gaming", author: "Pro Gamer", excerpt: "How to start a professional gaming career and compete at the highest levels.", date: "Jan 18, 2026" },
+            
+            // Technology
+            { id: 5, title: "AI and Machine Learning Basics", category: "Technology", author: "Dr. AI", excerpt: "Understanding artificial intelligence and how machine learning is changing our world.", date: "Jan 20, 2026" },
+            { id: 6, title: "Web Development Trends 2026", category: "Technology", author: "Code Master", excerpt: "Explore the latest frameworks and technologies shaping modern web development.", date: "Jan 17, 2026" },
+            { id: 7, title: "Cloud Computing Explained", category: "Technology", author: "Tech Writer", excerpt: "A complete guide to AWS, Azure, and Google Cloud for beginners.", date: "Jan 15, 2026" },
+            { id: 8, title: "Cybersecurity Best Practices", category: "Technology", author: "Security Pro", excerpt: "Protect your digital life with essential cybersecurity practices and tools.", date: "Jan 14, 2026" },
+            { id: 9, title: "Python Programming for Beginners", category: "Technology", author: "Code Ninja", excerpt: "Start your programming journey with Python: from basics to building projects.", date: "Jan 12, 2026" },
+            
+            // Science
+            { id: 10, title: "Rocket Science Explained", category: "Science", author: "Space Enthusiast", excerpt: "Understanding the physics behind rockets and space exploration.", date: "Jan 22, 2026" },
+            { id: 11, title: "Journey to Mars: Future Missions", category: "Science", author: "Astronomer", excerpt: "Latest developments in Mars exploration and colonization plans.", date: "Jan 16, 2026" },
+            { id: 12, title: "Quantum Physics Made Simple", category: "Science", author: "Physics Prof", excerpt: "Demystifying quantum mechanics with everyday examples and illustrations.", date: "Jan 13, 2026" },
+            { id: 13, title: "The Evolution of Species", category: "Science", author: "Biology Expert", excerpt: "Understanding Darwin's theory and modern evolutionary biology.", date: "Jan 11, 2026" },
+            { id: 14, title: "Climate Change: Science and Solutions", category: "Science", author: "Climate Scientist", excerpt: "Understanding global warming and practical solutions for sustainability.", date: "Jan 9, 2026" },
+            
+            // Travel
+            { id: 15, title: "Hidden Gems of Japan", category: "Travel", author: "Travel Bug", excerpt: "Discover lesser-known destinations and authentic experiences in Japan.", date: "Jan 24, 2026" },
+            { id: 16, title: "Budget Travel Guide to Europe", category: "Travel", author: "Wanderer", excerpt: "Tips and tricks for exploring Europe on a shoestring budget.", date: "Jan 20, 2026" },
+            { id: 17, title: "Hiking Adventures in Nepal", category: "Travel", author: "Hiker's Journey", excerpt: "Complete guide to trekking in the Himalayas and experiencing Nepal's beauty.", date: "Jan 18, 2026" },
+            { id: 18, title: "Island Hopping in Southeast Asia", category: "Travel", author: "Island Explorer", excerpt: "Island-by-island guide to Thailand, Philippines, and Indonesia.", date: "Jan 15, 2026" },
+            
+            // Food
+            { id: 19, title: "Mastering Italian Pasta Making", category: "Food", author: "Chef Marco", excerpt: "Learn authentic Italian pasta recipes and techniques from a professional chef.", date: "Jan 25, 2026" },
+            { id: 20, title: "Vegan Cooking Essentials", category: "Food", author: "Plant-Based Chef", excerpt: "Complete guide to plant-based cooking with delicious and healthy recipes.", date: "Jan 22, 2026" },
+            { id: 21, title: "Street Food Around the World", category: "Food", author: "Food Blogger", excerpt: "Explore iconic street foods from different cultures and cuisines.", date: "Jan 19, 2026" },
+            { id: 22, title: "Baking Tips and Tricks", category: "Food", author: "Baker's Heaven", excerpt: "Professional baking techniques and secrets for perfect bakes every time.", date: "Jan 16, 2026" },
+            { id: 23, title: "Coffee: From Bean to Cup", category: "Food", author: "Coffee Connoisseur", excerpt: "Understanding coffee origins, roasting, and brewing methods.", date: "Jan 13, 2026" },
+            
+            // Health
+            { id: 24, title: "Fitness Routines for Beginners", category: "Health", author: "Fitness Coach", excerpt: "Start your fitness journey with beginner-friendly exercises and routines.", date: "Jan 23, 2026" },
+            { id: 25, title: "Mental Health Awareness", category: "Health", author: "Wellness Expert", excerpt: "Understanding mental health and strategies for emotional wellbeing.", date: "Jan 20, 2026" },
+            { id: 26, title: "Nutrition Guide for Active Lifestyle", category: "Health", author: "Nutritionist", excerpt: "Optimal nutrition strategies for fitness and healthy living.", date: "Jan 17, 2026" },
+            { id: 27, title: "Meditation for Stress Relief", category: "Health", author: "Mindfulness Coach", excerpt: "Simple meditation techniques to reduce stress and improve focus.", date: "Jan 14, 2026" },
+            { id: 28, title: "Sleep Science and Better Sleep", category: "Health", author: "Sleep Specialist", excerpt: "Scientific tips to improve sleep quality and combat insomnia.", date: "Jan 11, 2026" },
+            
+            // Art
+            { id: 29, title: "Digital Art Basics", category: "Art", author: "Digital Artist", excerpt: "Getting started with digital painting and illustration tools.", date: "Jan 21, 2026" },
+            { id: 30, title: "Photography Composition Tips", category: "Art", author: "Photo Master", excerpt: "Master composition techniques to take stunning photographs.", date: "Jan 19, 2026" },
+            { id: 31, title: "Street Art and Muralism", category: "Art", author: "Street Artist", excerpt: "Exploring the world of street art and its cultural significance.", date: "Jan 16, 2026" },
+            { id: 32, title: "Watercolor Painting for Beginners", category: "Art", author: "Artist's Touch", excerpt: "Learn watercolor painting with step-by-step tutorials and techniques.", date: "Jan 13, 2026" },
+            { id: 33, title: "3D Modeling and Animation", category: "Art", author: "3D Creator", excerpt: "Introduction to 3D modeling software and animation techniques.", date: "Jan 10, 2026" },
+            
+            // Additional Blogs
+            { id: 34, title: "Entrepreneurship: Starting Your Business", category: "Business", author: "Business Mentor", excerpt: "Essential steps and strategies for launching your own successful business.", date: "Jan 24, 2026" },
+            { id: 35, title: "Personal Finance Management", category: "Finance", author: "Money Expert", excerpt: "Smart strategies for saving, investing, and building wealth.", date: "Jan 21, 2026" },
+            { id: 36, title: "History of Ancient Rome", category: "History", author: "History Scholar", excerpt: "Fascinating insights into the rise and fall of the Roman Empire.", date: "Jan 18, 2026" },
+            { id: 37, title: "Philosophy: Life Lessons from Stoics", category: "Philosophy", author: "Philosopher", excerpt: "Apply ancient Stoic philosophy to modern life challenges.", date: "Jan 15, 2026" },
+            { id: 38, title: "Learning a New Language", category: "Education", author: "Language Coach", excerpt: "Effective methods and resources for becoming fluent in a new language.", date: "Jan 12, 2026" },
+            { id: 39, title: "Music Production Basics", category: "Music", author: "Music Producer", excerpt: "Get started with music production using beginner-friendly tools.", date: "Jan 9, 2026" },
+            { id: 40, title: "Sports Training Guide", category: "Sports", author: "Coach Jones", excerpt: "Professional training methods to improve athletic performance.", date: "Jan 8, 2026" },
+
+            // 20 Additional Blogs
+            { id: 41, title: "Virtual Reality Gaming Experience", category: "Gaming", author: "VR Enthusiast", excerpt: "Explore the future of gaming with immersive virtual reality experiences.", date: "Jan 24, 2026" },
+            { id: 42, title: "Blockchain and Cryptocurrency", category: "Technology", author: "Crypto Expert", excerpt: "Understanding blockchain technology and how cryptocurrencies work.", date: "Jan 23, 2026" },
+            { id: 43, title: "The Big Bang Theory Explained", category: "Science", author: "Space Professor", excerpt: "Understanding the origins of our universe and the Big Bang.", date: "Jan 22, 2026" },
+            { id: 44, title: "New Zealand Adventure Guide", category: "Travel", author: "Adventure Seeker", excerpt: "Complete guide to hiking, bungee jumping, and exploring New Zealand.", date: "Jan 21, 2026" },
+            { id: 45, title: "Molecular Gastronomy", category: "Food", author: "Chef Science", excerpt: "Explore the science behind modern cooking techniques and molecular food.", date: "Jan 20, 2026" },
+            { id: 46, title: "Yoga and Flexibility Training", category: "Health", author: "Yoga Master", excerpt: "Improve flexibility and strength with comprehensive yoga routines.", date: "Jan 19, 2026" },
+            { id: 47, title: "Sculpture and 3D Art Forms", category: "Art", author: "Sculptor Pro", excerpt: "Techniques and inspiration for creating stunning 3D sculptures.", date: "Jan 18, 2026" },
+            { id: 48, title: "Stock Market Investing Basics", category: "Finance", author: "Investment Advisor", excerpt: "Learn how to start investing in stocks and build a portfolio.", date: "Jan 17, 2026" },
+            { id: 49, title: "Renaissance Art and History", category: "History", author: "Art Historian", excerpt: "Exploring the masterpieces and cultural significance of the Renaissance.", date: "Jan 16, 2026" },
+            { id: 50, title: "Buddhist Philosophy Explained", category: "Philosophy", author: "Spiritual Guide", excerpt: "Understanding the core teachings and practices of Buddhism.", date: "Jan 15, 2026" },
+            { id: 51, title: "JavaScript Modern Features", category: "Technology", author: "JS Developer", excerpt: "Master ES6+ JavaScript features and modern development practices.", date: "Jan 14, 2026" },
+            { id: 52, title: "Guitar Playing for Beginners", category: "Music", author: "Guitar Instructor", excerpt: "Learn basic guitar techniques and start playing your favorite songs.", date: "Jan 13, 2026" },
+            { id: 53, title: "Desert Exploration and Survival", category: "Travel", author: "Desert Guide", excerpt: "Essential tips for exploring deserts safely and experiencing unique landscapes.", date: "Jan 12, 2026" },
+            { id: 54, title: "Sustainable Living Guide", category: "Health", author: "Eco Warrior", excerpt: "Simple ways to reduce your carbon footprint and live sustainably.", date: "Jan 11, 2026" },
+            { id: 55, title: "Animation Principles and Practice", category: "Art", author: "Animation Master", excerpt: "Learn the 12 principles of animation and create stunning animations.", date: "Jan 10, 2026" },
+            { id: 56, title: "Cybersecurity Careers", category: "Technology", author: "Security Expert", excerpt: "Career paths and skills needed in the growing cybersecurity industry.", date: "Jan 9, 2026" },
+            { id: 57, title: "Pottery and Ceramics Craft", category: "Art", author: "Potter's Hand", excerpt: "Getting started with pottery and creating beautiful ceramic pieces.", date: "Jan 8, 2026" },
+            { id: 58, title: "Wilderness Camping Skills", category: "Travel", author: "Camping Expert", excerpt: "Master essential camping skills and enjoy the great outdoors safely.", date: "Jan 7, 2026" },
+            { id: 59, title: "Astronomy and Stargazing", category: "Science", author: "Astronomer Pro", excerpt: "Learn to identify stars, planets, and constellations in the night sky.", date: "Jan 6, 2026" },
+            { id: 60, title: "Career Transition Guide", category: "Education", author: "Career Coach", excerpt: "Navigate career changes and find your new professional path successfully.", date: "Jan 5, 2026" },
+        ];
+
+        let currentFilter = 'all';
+        let currentSearch = '';
+
+        function filterBlogs(category) {
+            currentFilter = category;
+            currentSearch = ''; // Clear search when filtering
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchCount').textContent = '';
+            
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            renderBlogs();
+        }
+
+        function searchBlogs() {
+            currentSearch = document.getElementById('searchInput').value.toLowerCase().trim();
+            currentFilter = 'all'; // Reset filter when searching
+            
+            // Update filter button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelectorAll('.filter-btn')[0].classList.add('active');
+            
+            renderBlogs();
+        }
+
+        function renderBlogs() {
+            const grid = document.getElementById('blogsGrid');
+            const searchCountDiv = document.getElementById('searchCount');
+            grid.innerHTML = '';
+            
+            // Load user-submitted blogs from localStorage
+            const userBlogs = JSON.parse(localStorage.getItem('userBlogs')) || [];
+            const approvedBlogs = JSON.parse(localStorage.getItem('approvedBlogs')) || [];
+            
+            // Combine hardcoded blogs with approved user blogs (not pending ones)
+            const allBlogs = [...blogs, ...approvedBlogs];
+            
+            let filtered = currentFilter === 'all' 
+                ? allBlogs 
+                : allBlogs.filter(blog => blog.category === currentFilter);
+            
+            // Apply search filter
+            if (currentSearch) {
+                filtered = filtered.filter(blog => 
+                    blog.title.toLowerCase().includes(currentSearch) ||
+                    blog.excerpt.toLowerCase().includes(currentSearch) ||
+                    blog.author.toLowerCase().includes(currentSearch) ||
+                    blog.category.toLowerCase().includes(currentSearch)
+                );
+            }
+            
+            // Display search count
+            if (currentSearch) {
+                searchCountDiv.textContent = `Found ${filtered.length} result${filtered.length !== 1 ? 's' : ''} for "${currentSearch}"`;
+            } else {
+                searchCountDiv.textContent = '';
+            }
+            
+            // Show no results message
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div class="no-results" style="grid-column: 1 / -1;">No blogs found. Try different keywords!</div>';
+                return;
+            }
+            
+            filtered.forEach(blog => {
+                const blogElement = document.createElement('div');
+                const isApproved = approvedBlogs.some(b => b.id === blog.id);
+                blogElement.className = 'blog-item' + (isApproved ? ' approved-blog-item' : '');
+                
+                let readButton = `<a href="blog-detail.html?id=${blog.id}" class="blog-read">Read →</a>`;
+                
+                blogElement.innerHTML = `
+                    <div class="blog-category">
+                        ${blog.category}
+                        ${isApproved ? '<span class="new-badge">NEW</span>' : ''}
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-author">👤 By ${blog.author}</div>
+                        <h3>${blog.title}</h3>
+                        <p class="blog-excerpt">${blog.excerpt}</p>
+                        <div class="blog-footer">
+                            <span>📅 ${blog.date}</span>
+                            ${readButton}
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(blogElement);
+            });
+        }
+
+        // Initial render
+        renderBlogs();
+    </script>
+</body>
+</html>

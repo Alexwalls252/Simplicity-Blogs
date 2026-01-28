@@ -320,7 +320,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>&copy; 2026 Simplicity Blog by Adhyain. All rights reserved.</p>
+        <p>&copy; 2026 Simplicity Blog by Adhyain Patel. All rights reserved.</p>
     </footer>
 
     <script>
@@ -392,67 +392,35 @@
             const subject = document.getElementById('feedback-subject').value;
             const message = document.getElementById('feedback-message').value;
             
-            // Prepare email data
-            const emailData = {
-                to: 'alexwalls252@gmail.com',
-                subject: `New Feedback: ${feedbackType} - ${subject}`,
-                from: currentUser.email,
+            // Create feedback object
+            const feedback = {
+                id: Date.now().toString(),
                 userName: currentUser.name,
-                feedbackType: feedbackType,
+                userEmail: currentUser.email,
+                type: feedbackType,
+                subject: subject,
                 message: message,
-                timestamp: new Date().toLocaleString()
+                timestamp: new Date().toLocaleString(),
+                status: 'unread'
             };
             
-            // Send feedback via FormSubmit (free service)
-            sendFeedbackEmail(emailData);
-        }
-
-        function sendFeedbackEmail(data) {
-            // Create a hidden form to submit to FormSubmit
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = 'https://formspree.io/f/mjvzwajp'; // Using Formspree for email
-            form.style.display = 'none';
-            
-            // Add fields
-            const fields = {
-                'User Name': data.userName,
-                'User Email': data.from,
-                'Feedback Type': data.feedbackType,
-                'Subject': data.subject,
-                'Message': data.message,
-                'Timestamp': data.timestamp
-            };
-            
-            for (let key in fields) {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = key;
-                input.value = fields[key];
-                form.appendChild(input);
-            }
-            
-            // Add honeypot field
-            const honeypot = document.createElement('input');
-            honeypot.type = 'hidden';
-            honeypot.name = '_captcha';
-            honeypot.value = 'false';
-            form.appendChild(honeypot);
-            
-            // Submit form
-            document.body.appendChild(form);
-            form.submit();
+            // Save to localStorage
+            saveFeedback(feedback);
             
             // Show success message
+            document.getElementById('successMessage').classList.add('show');
+            document.getElementById('feedbackSubmit').reset();
+            
+            // Redirect after 3 seconds
             setTimeout(() => {
-                document.getElementById('successMessage').classList.add('show');
-                document.getElementById('feedbackSubmit').reset();
-                
-                // Redirect after 3 seconds
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 3000);
-            }, 500);
+                window.location.href = 'index.html';
+            }, 3000);
+        }
+
+        function saveFeedback(feedback) {
+            let siteFeedback = JSON.parse(localStorage.getItem('siteFeedback')) || [];
+            siteFeedback.push(feedback);
+            localStorage.setItem('siteFeedback', JSON.stringify(siteFeedback));
         }
     </script>
 </body>
